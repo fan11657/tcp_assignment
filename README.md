@@ -19,3 +19,4 @@ An assignment from JigenTec.
 3. `./main <domain name> <port> [<file name>]`  
    e.g. `./main "www.assignment.jigentec.com" 49152 "download"`
 4. The download file is defaultly at `bin`, but you can change it as you want.
+5. Use `sha256sum <file name>` to verify if checksum of the download file is `093afcce35604b2ef9119f39981073e7ccd3530b569325fc9f6b2c40925b4e6d`
