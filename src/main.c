@@ -72,14 +72,21 @@ int main(int argc, char *argv[])
     int port = atoi(argv[2]);
     char *file_name = argc >= 4 ? argv[3] : "download";
 
+	printf("Connecting...\n");
     TcpClient *tcp_client = createTcpClient(domain, port);
-    tcpConnect(tcp_client);
+    if (tcpConnect(tcp_client) == -1)
+	{
+		printf("Connection failed!\n");
+		return 0;
+	};
+	printf("Connected!\n");
     
     // create dummy head of linked list
     PacketListNode *packet_list_head = createPacketListNode(NULL, NULL);
     PacketListNode *packet_list_node = packet_list_head;
     
     // get all packets
+	printf("Getting packets...\n");
     int packet_count = 0;
     Packet *packet = NULL;
     while ((packet = getPacket(tcp_client)) != NULL)
@@ -88,18 +95,20 @@ int main(int argc, char *argv[])
         packet_list_node = packet_list_node->next;
         packet_count++;
     }
-    
-    #ifdef DEBUG
-    printf("packet count: %d\n", packet_count);
-    #endif
+	free(tcp_client);
+    printf("Got %d packets!\n", packet_count);
     
     // sort packets
+	printf("Sorting packets...\n");
     Packet *sorted_packets[packet_count];
     sortPackets(packet_list_head->next, sorted_packets);
     free(packet_list_head);
+	printf("Done!\n");
     
     // dump to file
+	printf("Dumping to file...\n");
     dump_to_file(file_name, sorted_packets, packet_count);
+	printf("Done!\n");
     
     return 0;
 }
